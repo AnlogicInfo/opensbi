@@ -1,0 +1,9 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/sbi_ecall.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/sbi_ecall.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_console.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_list.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall_interface.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_error.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_trap.h

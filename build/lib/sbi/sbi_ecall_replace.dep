@@ -1,0 +1,19 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/sbi_ecall_replace.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/sbi_ecall_replace.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_list.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall_interface.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_error.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_hart.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ipi.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_system.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_timer.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_tlb.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_hartmask.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_bitmap.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_bitops.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_trap.h

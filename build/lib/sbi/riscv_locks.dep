@@ -1,0 +1,4 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/riscv_locks.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/riscv_locks.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_barrier.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_locks.h

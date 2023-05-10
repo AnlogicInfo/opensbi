@@ -1,0 +1,13 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/serial/fdt_serial.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/serial/fdt_serial.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/libfdt.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/libfdt_env.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_string.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/fdt.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_scratch.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_helper.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/fdt_serial.h

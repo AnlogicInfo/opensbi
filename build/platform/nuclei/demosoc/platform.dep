@@ -1,0 +1,23 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/platform/nuclei/demosoc/platform.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/platform/nuclei/demosoc/platform.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/libfdt.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/libfdt_env.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_string.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/libfdt/fdt.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_io.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_barrier.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_console.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_platform.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall_interface.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_error.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_scratch.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_version.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_fixup.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/irqchip/plic.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/al9000_uart.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/timer/core_feature_timer.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/sys/clint.h
