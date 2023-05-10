@@ -1,0 +1,9 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/riscv_atomic.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/riscv_atomic.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_bitops.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_atomic.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_barrier.h

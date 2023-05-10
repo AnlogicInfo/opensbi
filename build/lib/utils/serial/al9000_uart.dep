@@ -1,0 +1,4 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/serial/al9000_uart.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/serial/al9000_uart.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/al9000_uart.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h

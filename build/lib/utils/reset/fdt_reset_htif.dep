@@ -1,0 +1,6 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/reset/fdt_reset_htif.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/reset/fdt_reset_htif.c \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/reset/fdt_reset.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_helper.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/sys/htif.h

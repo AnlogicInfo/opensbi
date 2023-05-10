@@ -1,0 +1,9 @@
+/home/chenxihuang/works/al9000/risc-v/opensbi/build/platform/nuclei/demosoc/firmware/fw_jump.o: \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/firmware/fw_jump.S \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/firmware/fw_base.S \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_platform.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_scratch.h \
+ /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_trap.h
