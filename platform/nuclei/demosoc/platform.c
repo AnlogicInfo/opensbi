@@ -177,7 +177,7 @@ static int nuclei_early_init(bool cold_boot)
 
 	/* Measure CPU frequency using timer */
 	nuclei_clk_freq =50000000;//nuclei_get_clk_freq();
-  
+
   /*uart initial*/
  /* __RV_CSR_CLEAR(0x7D0,(1<<3));*/
 
@@ -200,14 +200,14 @@ static int nuclei_early_init(bool cold_boot)
        *(uint32_t *)(0xf880309cu) =0xe;
        *(uint32_t *)(0xf88030d0u) =0xf;      //mdc1   MIO52-53
        *(uint32_t *)(0xf88030d4u) =0xf;      //mdio1
-       *(uint32_t *)(0xf8803438u) =0x1;      //emio_sel	
+       *(uint32_t *)(0xf8803438u) =0x1;      //emio_sel
 
 
 
         AL9000_uart_init(AL9000_UART0,115200,UART_BIT_LENGTH_8);
 	AL9000_uart_config_stopbit(AL9000_UART0,AL9000_UART_STOP_BIT_1);
 	AL9000_uart_fifo_enable(AL9000_UART0);
- 
+
 
 	/* Init GPIO pinmux set by NUCLEI_GPIO_IOF_MASK */
 /*ianfang	regval = readl((void *)(NUCLEI_GPIO_ADDR + NUCLEI_GPIO_IOF_SEL_OFS)) &
@@ -249,6 +249,11 @@ static int nuclei_final_init(bool cold_boot)
    // Enable U-Mode to access all regions by setting spmpcfg0 and spmpaddr0
     csr_write(0x1a0, 0x1f);  //   ian fang20220125 sbi_trap_error
     csr_write(0x1b0, 0xffffffff);
+	csr_write(0x7ce, 0xffffffff);
+	sbi_printf("micfg_info : 0x%lx\r\n", csr_read(0xfc0));
+	sbi_printf("mdcfg_info : 0x%lx\r\n", csr_read(0xfc1));
+	sbi_printf("mcfg_info : 0x%lx\r\n", csr_read(0xfc2));
+	sbi_printf("misa : 0x%lx\r\n", csr_read(0x301));
 
 //	sbi_printf("modify dt later \n");
 
