@@ -1,9 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/reset/fdt_reset.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/reset/fdt_reset.c \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_scratch.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_helper.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/reset/fdt_reset.h

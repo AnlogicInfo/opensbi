@@ -1,8 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/timer/fdt_timer_clint.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/timer/fdt_timer_clint.c \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_error.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_ecall_interface.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_helper.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/timer/fdt_timer.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/sys/clint.h

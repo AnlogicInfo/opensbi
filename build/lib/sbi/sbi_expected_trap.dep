@@ -1,6 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/sbi_expected_trap.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/sbi_expected_trap.S \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_asm.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_trap.h

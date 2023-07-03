@@ -1,4 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/platform/nuclei/demosoc/firmware/payloads/test_head.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/firmware/payloads/test_head.S \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_encoding.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_const.h
