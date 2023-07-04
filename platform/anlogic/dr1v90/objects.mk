@@ -8,4 +8,5 @@
 #   hqfang <hqfang@nucleisys.com>
 #
 
+platform-objs-y += dr1v90_uart.o
 platform-objs-y += platform.o

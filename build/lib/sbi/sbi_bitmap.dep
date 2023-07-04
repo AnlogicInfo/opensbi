@@ -1,5 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/sbi/sbi_bitmap.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/sbi/sbi_bitmap.c \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_bitmap.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_bitops.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h

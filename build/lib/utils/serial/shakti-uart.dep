@@ -1,7 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/serial/shakti-uart.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/serial/shakti-uart.c \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_io.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/riscv_barrier.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_console.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/shakti-uart.h

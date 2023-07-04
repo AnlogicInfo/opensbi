@@ -1,11 +1,15 @@
 /*
- * AL9000_UART.C
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) Nuclei Corporation or its affiliates.
+ *
+ * DR1V90_UART.C
  *
  *  Created on: 2021年9月17日
  *      Author: wei.pang
  */
 
-#include <sbi_utils/serial/al9000_uart.h>
+#include "dr1v90_uart.h"
 #define uart_clock (40000000UL)
 /*!
     \brief  uart initialize
@@ -14,12 +18,11 @@
     \param  bit_length: bit length (5/6/7/8)
     \retval 0,if uart!=null; otherwise -1;
 */
-int32_t AL9000_uart_init(UART_AL9000_TypeDef *uart, uint32_t baudrate,AL9000_UART_BIT_LENGTH bit_length)
+int32_t dr1v90_uart_init(UART_DR1V90_TypeDef *uart, uint32_t baudrate,DR1V90_UART_BIT_LENGTH bit_length)
 {
     if (__RARELY(uart == NULL)) {
         return -1;
     }
-   // setvbuf(stdout, NULL, _IONBF, 0);
 
     uart->LCR 		 |= UART_REG_LCR_DLAB_MASK ;
     uart->DLH_IER 	  = ((uint16_t)(uart_clock / (baudrate*16))) >> 8 ;
@@ -52,7 +55,7 @@ int32_t AL9000_uart_init(UART_AL9000_TypeDef *uart, uint32_t baudrate,AL9000_UAR
     \param  stopbit: stop bit (1/2/0.5/1.5)
     \retval 0,if uart!=null; otherwise -1;
 */
-int32_t AL9000_uart_config_stopbit(UART_AL9000_TypeDef *uart, AL9000_UART_STOP_BIT stopbit)
+int32_t dr1v90_uart_config_stopbit(UART_DR1V90_TypeDef *uart, DR1V90_UART_STOP_BIT stopbit)
 {
    if (__RARELY(uart == NULL)) {
         return -1;
@@ -78,7 +81,7 @@ int32_t AL9000_uart_config_stopbit(UART_AL9000_TypeDef *uart, AL9000_UART_STOP_B
     \param  uart: uart parameter stuct
     \retval FCR:  value
 */
-uint8_t AL9000_uart_fifo_enable(UART_AL9000_TypeDef *uart)
+uint8_t dr1v90_uart_fifo_enable(UART_DR1V90_TypeDef *uart)
 {
 
     if (__RARELY(uart == NULL)) {
@@ -93,31 +96,30 @@ uint8_t AL9000_uart_fifo_enable(UART_AL9000_TypeDef *uart)
     \param  val: value of TXFIFO
     \retval 0,if uart!=null; otherwise -1;
 */
-void uart_write( char val)
+void dr1v90_uart_write( char val)
 {
-   if (__RARELY(AL9000_UART0 == NULL)) {
-        //return -1;
+   if (__RARELY(DR1V90_UART0 == NULL)) {
+        return;
     }
-    while ((AL9000_UART0 ->LSR & 0x20)==0);
-    AL9000_UART0 ->RBR_THR_DLL = val & 0xFF ;
-   // return 0;
+    while ((DR1V90_UART0 ->LSR & 0x20)==0);
+    DR1V90_UART0 ->RBR_THR_DLL = val & 0xFF ;
 }
 
 /*!
     \brief  uart RXFIFO receive
     \param  uart: uart parameter stuct
     \retval RXFIFO value
-    UART_AL9000_TypeDef *uart
-    AL9000_UART0
+    UART_DR1V90_TypeDef *uart
+    DR1V90_UART0
 */
-int uart_read(void)
+int dr1v90_uart_read(void)
 {
     uint32_t reg;
-    if (__RARELY(AL9000_UART0 == NULL)) {
+    if (__RARELY(DR1V90_UART0 == NULL)) {
         return -1;
     }
-    while ( 0 == ((AL9000_UART0 ->LSR) & 0x01));
-    reg = AL9000_UART0 ->RBR_THR_DLL;
+    while ( 0 == ((DR1V90_UART0 ->LSR) & 0x01));
+    reg = DR1V90_UART0 ->RBR_THR_DLL;
     return (uint8_t)(reg & 0xFF);
 }
 

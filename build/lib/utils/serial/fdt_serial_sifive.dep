@@ -1,6 +1,0 @@
-/home/chenxihuang/works/al9000/risc-v/opensbi/build/lib/utils/serial/fdt_serial_sifive.o: \
- /home/chenxihuang/works/al9000/risc-v/opensbi/lib/utils/serial/fdt_serial_sifive.c \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/fdt/fdt_helper.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi/sbi_types.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/fdt_serial.h \
- /home/chenxihuang/works/al9000/risc-v/opensbi/include/sbi_utils/serial/sifive-uart.h
