@@ -280,7 +280,7 @@ static void __noreturn init_coldboot(struct sbi_scratch *scratch, u32 hartid)
 	}
 
 	sbi_boot_print_domains(scratch);
-  sbi_printf("sbi_boot_print_domain \n");
+
 	rc = sbi_hart_pmp_configure(scratch);
 	if (rc) {
 		sbi_printf("%s: PMP configure failed (error %d)\n",
@@ -293,7 +293,6 @@ static void __noreturn init_coldboot(struct sbi_scratch *scratch, u32 hartid)
 	 * it sees correct domain assignment and PMP configuration.
 	 */
 
-  sbi_printf("sbi_platform_final_init \n");
 	rc = sbi_platform_final_init(plat, TRUE);
 	if (rc) {
 		sbi_printf("%s: platform final init failed (error %d)\n",
@@ -301,7 +300,6 @@ static void __noreturn init_coldboot(struct sbi_scratch *scratch, u32 hartid)
 		sbi_hart_hang();
 	}
 
-  sbi_printf("sbi_boot_print \n");
 	sbi_boot_print_hart(scratch, hartid);
 
 	wake_coldboot_harts(scratch, hartid);

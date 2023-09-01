@@ -260,10 +260,7 @@ int fdt_reserved_memory_nomap_fixup(void *fdt)
 void fdt_fixups(void *fdt)
 {
 	fdt_plic_fixup(fdt, "riscv,plic0");
-            sbi_printf("riscv plic0");
 	fdt_reserved_memory_fixup(fdt);
-
-            sbi_printf("fixup fdt");
 }
 
 

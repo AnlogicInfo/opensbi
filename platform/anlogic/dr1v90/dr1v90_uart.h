@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) Nuclei Corporation or its affiliates.
+ * Copyright (c) Anlogic Corporation or its affiliates.
  *
  * DR1V90_UART.H
  *
@@ -30,7 +30,6 @@ extern "C" {
 #include <sbi/sbi_types.h>
 
 /* Register offsets */
-#define SystemCoreClock		( 25000000UL)
 #define UART_REG_RBR		0x00
 #define UART_REG_THR		0x00
 #define UART_REG_DLL		0x00
@@ -52,9 +51,6 @@ extern "C" {
 #define UART_REG_CPR		0xF4
 
 #define __IOM volatile
-
-#define DR1V90_UART0_BASE	(0xF8400000)
-#define DR1V90_UART0		((UART_DR1V90_TypeDef *)DR1V90_UART0_BASE)
 
 typedef struct{
 	__IOM uint32_t RBR_THR_DLL;		// 0x00
@@ -356,11 +352,13 @@ typedef enum DR1V90_uart_bit_length {
 /*!
     \brief  uart initialize
     \param  uart: uart parameter stuct
+    \param  uart_clock: uart clock
     \param  baudrate: uart buadrate
     \param  bit_length: bit length (5/6/7/8/9)
     \retval 0,if uart!=null; otherwise -1;
 */
-int32_t dr1v90_uart_init(UART_DR1V90_TypeDef *uart, uint32_t baudrate,DR1V90_UART_BIT_LENGTH bitlength);
+int32_t dr1v90_uart_init(UART_DR1V90_TypeDef *uart, uint32_t uart_clock,
+	       uint32_t baudrate, DR1V90_UART_BIT_LENGTH bit_length);
 /*!
     \brief  uart stop bit config
     \param  uart: uart parameter stuct
@@ -374,7 +372,7 @@ int32_t dr1v90_uart_config_stopbit(UART_DR1V90_TypeDef *uart, DR1V90_UART_STOP_B
     \param  val: value of TXFIFO
     \retval 0,if uart!=null; otherwise -1;
 */
-void dr1v90_uart_write(char val);
+void dr1v90_uart_write(UART_DR1V90_TypeDef *uart, char val);
 /*!
     \brief  uart FIFOF enable
     \param  uart: uart parameter stuct
@@ -386,7 +384,7 @@ uint8_t dr1v90_uart_fifo_enable(UART_DR1V90_TypeDef *uart);
     \param  uart: uart parameter stuct
     \retval RXFIFO value
 */
-int dr1v90_uart_read();
+int dr1v90_uart_read(UART_DR1V90_TypeDef *uart);
 
 #ifndef __RARELY
   #define __RARELY(exp)  __builtin_expect((exp), 0)
