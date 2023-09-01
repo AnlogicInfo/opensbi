@@ -1,7 +1,7 @@
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) Nuclei Corporation or its affiliates.
+ * Copyright (c) Anlogic Corporation or its affiliates.
  *
  * DR1V90_UART.C
  *
@@ -10,15 +10,17 @@
  */
 
 #include "dr1v90_uart.h"
-#define uart_clock (40000000UL)
+
 /*!
     \brief  uart initialize
     \param  uart: uart parameter stuct
+    \param  uart_clock: uart clock
     \param  baudrate: uart buadrate
     \param  bit_length: bit length (5/6/7/8)
     \retval 0,if uart!=null; otherwise -1;
 */
-int32_t dr1v90_uart_init(UART_DR1V90_TypeDef *uart, uint32_t baudrate,DR1V90_UART_BIT_LENGTH bit_length)
+int32_t dr1v90_uart_init(UART_DR1V90_TypeDef *uart, uint32_t uart_clock,
+		uint32_t baudrate, DR1V90_UART_BIT_LENGTH bit_length)
 {
     if (__RARELY(uart == NULL)) {
         return -1;
@@ -96,13 +98,13 @@ uint8_t dr1v90_uart_fifo_enable(UART_DR1V90_TypeDef *uart)
     \param  val: value of TXFIFO
     \retval 0,if uart!=null; otherwise -1;
 */
-void dr1v90_uart_write( char val)
+void dr1v90_uart_write(UART_DR1V90_TypeDef *uart, char val)
 {
-   if (__RARELY(DR1V90_UART0 == NULL)) {
+   if (__RARELY(uart == NULL)) {
         return;
     }
-    while ((DR1V90_UART0 ->LSR & 0x20)==0);
-    DR1V90_UART0 ->RBR_THR_DLL = val & 0xFF ;
+    while ((uart ->LSR & 0x20)==0);
+    uart->RBR_THR_DLL = val & 0xFF ;
 }
 
 /*!
@@ -112,14 +114,14 @@ void dr1v90_uart_write( char val)
     UART_DR1V90_TypeDef *uart
     DR1V90_UART0
 */
-int dr1v90_uart_read(void)
+int dr1v90_uart_read(UART_DR1V90_TypeDef *uart)
 {
     uint32_t reg;
-    if (__RARELY(DR1V90_UART0 == NULL)) {
+    if (__RARELY(uart == NULL)) {
         return -1;
     }
-    while ( 0 == ((DR1V90_UART0 ->LSR) & 0x01));
-    reg = DR1V90_UART0 ->RBR_THR_DLL;
+    while ( 0 == ((uart ->LSR) & 0x01));
+    reg = uart ->RBR_THR_DLL;
     return (uint8_t)(reg & 0xFF);
 }
 

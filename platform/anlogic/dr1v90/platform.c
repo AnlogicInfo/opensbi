@@ -17,14 +17,16 @@
 #include <sbi_utils/irqchip/plic.h>
 #include <sbi_utils/sys/clint.h>
 
+#include <board_cfg.h>
+
 /* clang-format off */
 
 #define DR1V90_HART_COUNT		1
-#define DR1V90_TIMER_FREQ		50000000/*32768 ian fang*/
 
 /* dr1v90 timer base address */
-#define DR1V90_DR1V90_TIMER_ADDR  0x68030000	/*0x2000000 ian fang*/
+#define DR1V90_DR1V90_TIMER_ADDR  0x68030000
 #define DR1V90_DR1V90_TIMER_MSFTRST_OFS	0xFF0
+#define DR1V90_DR1V90_TIMER_CTL_OFS	0xFF8
 #define DR1V90_DR1V90_TIMER_MSFTRST_KEY	0x80000A5F
 /* The clint compatiable timer offset is 0x1000 against dr1v90 timer */
 #define DR1V90_CLINT_TIMER_ADDR		(DR1V90_DR1V90_TIMER_ADDR + 0x1000)
@@ -32,9 +34,6 @@
 #define DR1V90_PLIC_ADDR	0x6c000000    /*	0x8000000*/
 #define DR1V90_PLIC_NUM_SOURCES		0x35
 #define DR1V90_PLIC_NUM_PRIORITIES	7
-
-#define DR1V90_UART0_ADDR	  0xF8400000  /*	0x10013000 ianfang*/
-#define DR1V90_UART1_ADDR		0xF8401000    /*0x10023000*/
 
 
 #ifndef __RISCV_XLEN
@@ -70,8 +69,15 @@
     })
 
 
+#define CSR_MNOCB		0x7F5
+#define CSR_MNOCM		0x7F6
+#define CSR_MCACHE_CTL		0x7CA
+#define CSR_CCM_SUEN		0x7CE
+
+#define CCM_SUEN_ENABLE		0x03030303
+#define CSR_CACHE_ENABLE	0x100C1
+
 /* clang-format on */
-static u32 dr1v90_clk_freq = 2500000 ; /*16000000; ian fang */
 
 static struct plic_data plic = {
 	.addr = DR1V90_PLIC_ADDR,
@@ -85,33 +91,23 @@ static struct clint_data clint = {
 	.has_64bit_mmio = TRUE,
 };
 
+unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
+				unsigned long arg2, unsigned long arg3,
+				unsigned long arg4)
+{
+	void *mtimectl = (void *)(DR1V90_DR1V90_TIMER_ADDR+DR1V90_DR1V90_TIMER_CTL_OFS);
+	u32 value;
+	value = readl(mtimectl);
+	writel(value | 0x4, mtimectl);
+	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
+	return arg1;
+}
+
 static int dr1v90_early_init(bool cold_boot)
 {
-	dr1v90_clk_freq =50000000;
-
-	*(uint32_t *)(0xf8803068u) =0x3;    //uart0  MIO26/27
-	*(uint32_t *)(0xf880306cu) =0x3;
-	*(uint32_t *)(0xf8803410u) =0x1;
-
-	*(uint32_t *)(0xf8803070u) =0xe;     //rgmii1 mio 28-39
-	*(uint32_t *)(0xf8803074u) =0xe;
-	*(uint32_t *)(0xf8803078u) =0xe;
-	*(uint32_t *)(0xf880307cu) =0xe;
-	*(uint32_t *)(0xf8803080u) =0xe;
-	*(uint32_t *)(0xf8803084u) =0xe;
-	*(uint32_t *)(0xf8803088u) =0xe;
-	*(uint32_t *)(0xf880308cu) =0xe;
-	*(uint32_t *)(0xf8803090u) =0xe;
-	*(uint32_t *)(0xf8803094u) =0xe;
-	*(uint32_t *)(0xf8803098u) =0xe;
-	*(uint32_t *)(0xf880309cu) =0xe;
-	*(uint32_t *)(0xf88030d0u) =0xf;      //mdc1   MIO52-53
-	*(uint32_t *)(0xf88030d4u) =0xf;      //mdio1
-	*(uint32_t *)(0xf8803438u) =0x1;      //emio_sel
-
-	dr1v90_uart_init(DR1V90_UART0,115200,UART_BIT_LENGTH_8);
-	dr1v90_uart_config_stopbit(DR1V90_UART0,DR1V90_UART_STOP_BIT_1);
-	dr1v90_uart_fifo_enable(DR1V90_UART0);
+	dr1v90_uart_init(DR1V90_UART, uart_clock, uart_baud, UART_BIT_LENGTH_8);
+	dr1v90_uart_config_stopbit(DR1V90_UART,DR1V90_UART_STOP_BIT_1);
+	dr1v90_uart_fifo_enable(DR1V90_UART);
 
 	return 0;
 }
@@ -129,23 +125,33 @@ static int dr1v90_final_init(bool cold_boot)
 		return 0;
 
 	fdt = sbi_scratch_thishart_arg1_ptr();
-	sbi_printf("modify dt before 1  %p %d\n",(unsigned long *)fdt,dr1v90_clk_freq);
 	dr1v90_modify_dt(fdt);
+
 	// Enable U-Mode to access all regions by setting spmpcfg0 and spmpaddr0
-	csr_write(0x1a0, 0x1f);  //   ian fang20220125 sbi_trap_error
+	csr_write(0x1a0, 0x1f);  //sbi_trap_error
 	csr_write(0x1b0, 0xffffffff);
 	csr_write(0x7ce, 0xffffffff);
-	sbi_printf("micfg_info : 0x%lx\r\n", csr_read(0xfc0));
-	sbi_printf("mdcfg_info : 0x%lx\r\n", csr_read(0xfc1));
-	sbi_printf("mcfg_info : 0x%lx\r\n", csr_read(0xfc2));
-	sbi_printf("misa : 0x%lx\r\n", csr_read(0x301));
+	sbi_printf("micfg_info                : 0x%lx\r\n", csr_read(0xfc0));
+	sbi_printf("mdcfg_info                : 0x%lx\r\n", csr_read(0xfc1));
+	sbi_printf("mcfg_info                 : 0x%lx\r\n", csr_read(0xfc2));
+	sbi_printf("misa                      : 0x%lx\r\n", csr_read(0x301));
 
 	return 0;
 }
 
 static int dr1v90_console_init(void)
 {
-	return dr1v90_uart_init(DR1V90_UART0,115200,UART_BIT_LENGTH_8);
+	return dr1v90_uart_init(DR1V90_UART, uart_clock, uart_baud, UART_BIT_LENGTH_8);
+}
+
+static void dr1v90_console_write(char val)
+{
+	dr1v90_uart_write(DR1V90_UART, val);
+}
+
+static int dr1v90_console_read(void)
+{
+	return dr1v90_uart_read(DR1V90_UART);
 }
 
 static int dr1v90_irqchip_init(bool cold_boot)
@@ -204,8 +210,8 @@ static void dr1v90_system_reset(u32 type, u32 reason)
 const struct sbi_platform_operations platform_ops = {
 	.early_init		= dr1v90_early_init,
 	.final_init		= dr1v90_final_init,
-	.console_putc		= dr1v90_uart_write,
-	.console_getc		= dr1v90_uart_read,
+	.console_putc		= dr1v90_console_write,
+	.console_getc		= dr1v90_console_read,
 	.console_init		= dr1v90_console_init,
 	.irqchip_init		= dr1v90_irqchip_init,
 	.ipi_send		= clint_ipi_send,
