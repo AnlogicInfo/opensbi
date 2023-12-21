@@ -73,6 +73,7 @@
 #define CSR_MNOCM		0x7F6
 #define CSR_MCACHE_CTL		0x7CA
 #define CSR_CCM_SUEN		0x7CE
+#define CSR_MMISC_CTL           0x7D0
 
 #define CCM_SUEN_ENABLE		0x03030303
 #define CSR_CACHE_ENABLE	0x100C1
@@ -100,6 +101,10 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 	value = readl(mtimectl);
 	writel(value | 0x4, mtimectl);
 	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
+	//disable bpu, it accesses GP, cause bus timeout error and system reset
+	value = csr_read(CSR_MMISC_CTL);
+	value &= ~(1<<3);
+	csr_write(CSR_MMISC_CTL, value);
 	return arg1;
 }
 
