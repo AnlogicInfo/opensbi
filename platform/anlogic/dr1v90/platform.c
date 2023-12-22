@@ -12,6 +12,8 @@
 #include <sbi/sbi_console.h>
 #include <sbi/sbi_const.h>
 #include <sbi/sbi_platform.h>
+#include <sbi/sbi_ecall_interface.h>
+#include <sbi/sbi_timer.h>
 #include <dr1v90_uart.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/irqchip/plic.h>
@@ -77,6 +79,8 @@
 
 #define CCM_SUEN_ENABLE		0x03030303
 #define CSR_CACHE_ENABLE	0x100C1
+
+#define AL_EXT_FPGA		(SBI_EXT_VENDOR_START+0)
 
 /* clang-format on */
 
@@ -212,6 +216,29 @@ static void dr1v90_system_reset(u32 type, u32 reason)
 	while(1);
 }
 
+void platform_udelay(unsigned long usec)
+{
+	u64 tmp;
+	tmp = sbi_timer_value() + ((usec * TIMER_CLOCK_RATE)/1000000);
+	while (sbi_timer_value() < (tmp+1))
+		;
+}
+
+extern int dr1v90_fpga_prog(long funcid,
+		   const struct sbi_trap_regs *regs,
+		   unsigned long *out_value,
+		   struct sbi_trap_info *out_trap);
+static int dr1v90_ext_provider(long extid, long funcid,
+			   const struct sbi_trap_regs *regs,
+			   unsigned long *out_value,
+			   struct sbi_trap_info *out_trap)
+{
+	if (extid == AL_EXT_FPGA) {
+		return dr1v90_fpga_prog(funcid, regs, out_value, out_trap);
+	}
+	return SBI_ENOTSUPP;
+}
+
 const struct sbi_platform_operations platform_ops = {
 	.early_init		= dr1v90_early_init,
 	.final_init		= dr1v90_final_init,
@@ -227,7 +254,8 @@ const struct sbi_platform_operations platform_ops = {
 	.timer_event_start	= clint_timer_event_start,
 	.timer_init		= dr1v90_timer_init,
 	.system_reset_check	= dr1v90_system_reset_check,
-	.system_reset		= dr1v90_system_reset
+	.system_reset		= dr1v90_system_reset,
+	.vendor_ext_provider	= dr1v90_ext_provider,
 };
 
 const struct sbi_platform platform = {
