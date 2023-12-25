@@ -22,6 +22,7 @@
 #include <sbi_utils/sys/clint.h>
 
 #include <board_cfg.h>
+#include "hardware.h"
 
 /* clang-format off */
 
@@ -207,15 +208,29 @@ static int dr1v90_timer_init(bool cold_boot)
 
 static int dr1v90_system_reset_check(u32 type, u32 reason)
 {
-	return 1;
+	if (type == SBI_SRST_RESET_TYPE_COLD_REBOOT ||
+	    type == SBI_SRST_RESET_TYPE_WARM_REBOOT)
+		return 1;
+	else
+		return 0;
 }
 
 static void dr1v90_system_reset(u32 type, u32 reason)
 {
 	/* Reset system using MSFTRST register in Dr1v90 Timer. */
-	writel(DR1V90_DR1V90_TIMER_MSFTRST_KEY, (void *)(DR1V90_DR1V90_TIMER_ADDR
-					+ DR1V90_DR1V90_TIMER_MSFTRST_OFS));
-	while(1);
+	//writel(DR1V90_DR1V90_TIMER_MSFTRST_KEY, (void *)(DR1V90_DR1V90_TIMER_ADDR
+	//				+ DR1V90_DR1V90_TIMER_MSFTRST_OFS));
+	u32 reg_val;
+	if (type == SBI_SRST_RESET_TYPE_COLD_REBOOT ||
+	    type == SBI_SRST_RESET_TYPE_WARM_REBOOT) {
+		reg_val = readl((void*)SYSCTRL_S_GLOBAL_SRSTN);
+		reg_val &= (u32)~SYSCTRL_S_GLOBAL_SRSTN_MSK_GLB_SRST;
+		writel((u32)reg_val, (void*)SYSCTRL_S_GLOBAL_SRSTN);
+	} else {
+		sbi_printf("sbi: not supported reset type\n");
+	}
+	while(1)
+		wfi();
 }
 
 void platform_udelay(unsigned long usec)
