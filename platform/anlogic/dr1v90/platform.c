@@ -106,6 +106,8 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 	value = readl(mtimectl);
 	writel(value | 0x4, mtimectl);
 	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
+	//Enable S/U mode CCM operation
+	csr_write(CSR_CCM_SUEN, CCM_SUEN_ENABLE);
 	//disable bpu, it accesses GP, cause bus timeout error and system reset
 	value = csr_read(CSR_MMISC_CTL);
 	value &= ~(1<<3);
