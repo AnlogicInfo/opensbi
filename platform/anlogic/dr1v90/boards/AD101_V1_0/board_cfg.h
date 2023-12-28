@@ -4,3 +4,5 @@
 #define uart_clock		(50000000UL)
 #define uart_baud		(115200UL)
 #define TIMER_CLOCK_RATE	400000000
+#define DDR_BASE		0x00000000
+#define DDR_SIZE		0x40000000
