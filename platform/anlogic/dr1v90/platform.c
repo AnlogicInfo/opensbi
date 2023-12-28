@@ -12,6 +12,8 @@
 #include <sbi/sbi_console.h>
 #include <sbi/sbi_const.h>
 #include <sbi/sbi_platform.h>
+#include <sbi/sbi_domain.h>
+#include <sbi/sbi_math.h>
 #include <sbi/sbi_ecall_interface.h>
 #include <sbi/sbi_timer.h>
 #include <dr1v90_uart.h>
@@ -83,6 +85,12 @@
 
 #define AL_EXT_FPGA		(SBI_EXT_VENDOR_START+0)
 
+#define ROOT_FW_REGION		0
+#define ROOT_DDR_REGION		1
+#define ROOT_ALL_REGION		2
+#define ROOT_END_REGION		3
+static struct sbi_domain_memregion root_memregs[ROOT_END_REGION + 1] = { 0 };
+
 /* clang-format on */
 
 static struct plic_data plic = {
@@ -108,10 +116,6 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
 	//Enable S/U mode CCM operation
 	csr_write(CSR_CCM_SUEN, CCM_SUEN_ENABLE);
-	//disable bpu, it accesses GP, cause bus timeout error and system reset
-	value = csr_read(CSR_MMISC_CTL);
-	value &= ~(1<<3);
-	csr_write(CSR_MMISC_CTL, value);
 	return arg1;
 }
 
@@ -256,6 +260,41 @@ static int dr1v90_ext_provider(long extid, long funcid,
 	return SBI_ENOTSUPP;
 }
 
+static struct sbi_domain_memregion *dr1v90_root_regions(void)
+{
+	u32 hartid = current_hartid();
+	struct sbi_scratch *scratch = sbi_hartid_to_scratch(hartid);
+
+	if (!scratch)
+		return NULL;
+
+	/* Root domain firmware memory region */
+	root_memregs[ROOT_FW_REGION].order = log2roundup(scratch->fw_size);
+	root_memregs[ROOT_FW_REGION].base = scratch->fw_start &
+				~((1UL << root_memregs[0].order) - 1UL);
+	root_memregs[ROOT_FW_REGION].flags = 0;
+
+	/* Root domain ddr region */
+	root_memregs[ROOT_DDR_REGION].order = log2roundup(DDR_SIZE);
+	root_memregs[ROOT_DDR_REGION].base = DDR_BASE;
+	root_memregs[ROOT_DDR_REGION].flags = (SBI_DOMAIN_MEMREGION_READABLE |
+						SBI_DOMAIN_MEMREGION_WRITEABLE |
+						SBI_DOMAIN_MEMREGION_EXECUTABLE |
+						SBI_DOMAIN_MEMREGION_MMODE);
+
+	/* Root domain allow everything memory region */
+	root_memregs[ROOT_ALL_REGION].order = __riscv_xlen;
+	root_memregs[ROOT_ALL_REGION].base = 0;
+	root_memregs[ROOT_ALL_REGION].flags = (SBI_DOMAIN_MEMREGION_READABLE |
+						SBI_DOMAIN_MEMREGION_WRITEABLE |
+						SBI_DOMAIN_MEMREGION_MMODE);
+
+	/* Root domain memory region end */
+	root_memregs[ROOT_END_REGION].order = 0;
+
+	return root_memregs;
+}
+
 const struct sbi_platform_operations platform_ops = {
 	.early_init		= dr1v90_early_init,
 	.final_init		= dr1v90_final_init,
@@ -273,6 +312,7 @@ const struct sbi_platform_operations platform_ops = {
 	.system_reset_check	= dr1v90_system_reset_check,
 	.system_reset		= dr1v90_system_reset,
 	.vendor_ext_provider	= dr1v90_ext_provider,
+	.domains_root_regions	= dr1v90_root_regions,
 };
 
 const struct sbi_platform platform = {
