@@ -15,6 +15,7 @@
 #include <sbi/sbi_domain.h>
 #include <sbi/sbi_math.h>
 #include <sbi/sbi_ecall_interface.h>
+#include <sbi/sbi_trap.h>
 #include <sbi/sbi_timer.h>
 #include <dr1v90_uart.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
@@ -84,6 +85,9 @@
 #define CSR_CACHE_ENABLE	0x100C1
 
 #define AL_EXT_FPGA		(SBI_EXT_VENDOR_START+0)
+#define AL_EXT_NCACHE		(SBI_EXT_VENDOR_START+1)
+#define AL_EXT_NCACHE_SET	0
+#define AL_EXT_NCACHE_CLR	1
 
 #define ROOT_FW_REGION		0
 #define ROOT_DDR_REGION		1
@@ -256,6 +260,17 @@ static int dr1v90_ext_provider(long extid, long funcid,
 {
 	if (extid == AL_EXT_FPGA) {
 		return dr1v90_fpga_prog(funcid, regs, out_value, out_trap);
+	} else if (extid == AL_EXT_NCACHE) {
+		if (funcid == AL_EXT_NCACHE_SET) {
+			csr_write(CSR_MNOCB, 0);
+			csr_write(CSR_MNOCM, regs->a1&0xFFFFFFFC);
+			csr_write(CSR_MNOCB, (regs->a0&0xFFFFFFFC)|1);
+			return 0;
+		} else if (funcid == AL_EXT_NCACHE_CLR) {
+			csr_write(CSR_MNOCB, 0);
+			csr_write(CSR_MNOCM, 0);
+			return 0;
+		}
 	}
 	return SBI_ENOTSUPP;
 }
