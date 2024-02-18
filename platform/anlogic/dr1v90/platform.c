@@ -132,20 +132,10 @@ static int dr1v90_early_init(bool cold_boot)
 	return 0;
 }
 
-static void dr1v90_modify_dt(void *fdt)
-{
-	fdt_fixups(fdt);
-}
-
 static int dr1v90_final_init(bool cold_boot)
 {
-	void *fdt;
-
 	if (!cold_boot)
 		return 0;
-
-	fdt = sbi_scratch_thishart_arg1_ptr();
-	dr1v90_modify_dt(fdt);
 
 	// Enable U-Mode to access all regions by setting spmpcfg0 and spmpaddr0
 	csr_write(0x1a0, 0x1f);  //sbi_trap_error
