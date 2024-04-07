@@ -5,8 +5,8 @@
  *
  * DR1V90_UART.C
  *
- *  Created on: 2021年9月17日
- *      Author: wei.pang
+ * Created on: 2021年9月17日
+ * Author: wei.pang
  */
 
 #include "dr1v90_uart.h"

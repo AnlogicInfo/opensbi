@@ -1,7 +1,10 @@
-/* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
- * Copyright (c) 2022 Anlogic Inc.
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) Anlogic Corporation or its affiliates.
+ *
  */
+
 #ifndef _DR1M90_HW_H_
 #define _DR1M90_HW_H_
 

@@ -1,3 +1,10 @@
+/*
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) Anlogic Corporation or its affiliates.
+ *
+ */
+
 #include <sbi/riscv_asm.h>
 #include <sbi/riscv_io.h>
 #include <sbi/sbi_const.h>

@@ -1,3 +1,9 @@
+/*
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) Anlogic Corporation or its affiliates.
+ *
+ */
 #define DR1V90_UART0_ADDR	0xF8400000
 #define DR1V90_UART1_ADDR	0xF8401000
 #define DR1V90_UART		((UART_DR1V90_TypeDef *)DR1V90_UART1_ADDR)
