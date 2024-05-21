@@ -8,3 +8,4 @@
 platform-objs-y += dr1v90_uart.o
 platform-objs-y += platform.o
 platform-objs-y += fpga_prog.o
+platform-objs-y += crypto.o
