@@ -78,11 +78,14 @@
 #define CSR_MNOCB		0x7F5
 #define CSR_MNOCM		0x7F6
 #define CSR_MCACHE_CTL		0x7CA
+#define CSR_CCM_MCOMMAND	0x7CC
 #define CSR_CCM_SUEN		0x7CE
 #define CSR_MMISC_CTL           0x7D0
 
 #define CCM_SUEN_ENABLE		0x03030303
 #define CSR_CACHE_ENABLE	0x100C1
+#define CCM_DC_INVAL_ALL	0x17
+#define CCM_IC_INVAL_ALL	0xd
 
 #define AL_EXT_FPGA		(SBI_EXT_VENDOR_START+0)
 #define AL_EXT_NCACHE		(SBI_EXT_VENDOR_START+1)
@@ -117,6 +120,8 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 	u32 value;
 	value = readl(mtimectl);
 	writel(value | 0x4, mtimectl);
+	csr_write(CSR_CCM_MCOMMAND, CCM_DC_INVAL_ALL);
+	csr_write(CSR_CCM_MCOMMAND, CCM_IC_INVAL_ALL);
 	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
 	//Enable S/U mode CCM operation
 	csr_write(CSR_CCM_SUEN, CCM_SUEN_ENABLE);
