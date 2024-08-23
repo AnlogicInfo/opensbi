@@ -41,6 +41,8 @@
 #define DR1V90_PLIC_NUM_SOURCES		0x35
 #define DR1V90_PLIC_NUM_PRIORITIES	7
 
+#define CFG_CTRL_RPU		(0xF8800000 + 0x178)
+
 
 #ifndef __RISCV_XLEN
   /** \brief Refer to the width of an integer register in bits(either 32 or 64) */
@@ -91,11 +93,19 @@
 #define AL_EXT_NCACHE		(SBI_EXT_VENDOR_START+1)
 #define AL_EXT_NCACHE_SET	0
 #define AL_EXT_NCACHE_CLR	1
+#define AL_EXT_NCACHE_HIADDR	(SBI_EXT_VENDOR_START+2)
+#define AL_EXT_NCACHE_HIADDR_SET	0
 
 #define ROOT_FW_REGION		0
 #define ROOT_DDR_REGION		1
 #define ROOT_ALL_REGION		2
 #define ROOT_END_REGION		3
+
+static int dr1v90_set_ncache_hiaddr(unsigned long phys_addr, unsigned long size,
+				 const struct sbi_trap_regs *regs,
+				 unsigned long *out_value,
+				 struct sbi_trap_info *out_trap);
+
 static struct sbi_domain_memregion root_memregs[ROOT_END_REGION + 1] = { 0 };
 
 /* clang-format on */
@@ -125,6 +135,10 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 	csr_write(CSR_MCACHE_CTL, CSR_CACHE_ENABLE);
 	//Enable S/U mode CCM operation
 	csr_write(CSR_CCM_SUEN, CCM_SUEN_ENABLE);
+
+	dr1v90_set_ncache_hiaddr(0x60000000, 0x20000000,
+				 NULL, NULL, NULL);
+
 	return arg1;
 }
 
@@ -244,6 +258,58 @@ void platform_udelay(unsigned long usec)
 		;
 }
 
+static int dr1v90_set_ncache_csr(unsigned long phys_addr, unsigned long size,
+				 const struct sbi_trap_regs *regs,
+				 unsigned long *out_value,
+				 struct sbi_trap_info *out_trap)
+{
+	unsigned long mask, addr, end;
+	int ret;
+
+	if (size < PAGE_SIZE)
+		return SBI_ERR_INVALID_PARAM;
+
+	ret = PAGE_SHIFT - 1;
+	addr = phys_addr;
+	end = phys_addr + size - 1;
+	do {
+		ret++;
+		mask = (1UL << ret) - 1;
+	} while ((addr & ~mask) != (end & ~mask));
+
+	addr = (phys_addr & ~mask);
+	csr_write(CSR_MNOCB, 0);
+	csr_write(CSR_MNOCM, (~mask) & 0xFFFFFFFC);
+	csr_write(CSR_MNOCB, (addr & 0xFFFFFFFC) | 1);
+	*out_value = (addr | (ret & (PAGE_SIZE - 1)));
+	return SBI_SUCCESS;
+}
+
+#define NC_HIADDR_ADDR	0x1A0000000UL
+#define NC_HIADDR_SIZE	0x20000000UL
+#define NC_HIADDR_MASK	(~(NC_HIADDR_SIZE - 1))
+static int dr1v90_set_ncache_hiaddr(unsigned long phys_addr, unsigned long size,
+				 const struct sbi_trap_regs *regs,
+				 unsigned long *out_value,
+				 struct sbi_trap_info *out_trap)
+{
+	unsigned long val, addr, end;
+
+	addr = (phys_addr & NC_HIADDR_MASK);
+	end = ((phys_addr + size - 1) & NC_HIADDR_MASK);
+	if (addr != end)
+		return SBI_ERR_INVALID_PARAM;
+
+	val = ((readl((void*)CFG_CTRL_RPU) & ~0xFF00UL) |
+	      (((addr ^ NC_HIADDR_ADDR) >> 20) & 0xFF00UL));
+	writel(val, (void*)CFG_CTRL_RPU);
+
+	if (out_value)
+		*out_value = (NC_HIADDR_ADDR | (phys_addr & ~NC_HIADDR_MASK));
+
+	return SBI_SUCCESS;
+}
+
 extern int dr1v90_fpga_prog(long funcid,
 		   const struct sbi_trap_regs *regs,
 		   unsigned long *out_value,
@@ -257,14 +323,17 @@ static int dr1v90_ext_provider(long extid, long funcid,
 		return dr1v90_fpga_prog(funcid, regs, out_value, out_trap);
 	} else if (extid == AL_EXT_NCACHE) {
 		if (funcid == AL_EXT_NCACHE_SET) {
-			csr_write(CSR_MNOCB, 0);
-			csr_write(CSR_MNOCM, regs->a1&0xFFFFFFFC);
-			csr_write(CSR_MNOCB, (regs->a0&0xFFFFFFFC)|1);
-			return 0;
+			return dr1v90_set_ncache_csr(regs->a0, regs->a1,
+						     regs, out_value, out_trap);
 		} else if (funcid == AL_EXT_NCACHE_CLR) {
 			csr_write(CSR_MNOCB, 0);
 			csr_write(CSR_MNOCM, 0);
-			return 0;
+			return SBI_SUCCESS;
+		}
+	} else if (extid == AL_EXT_NCACHE_HIADDR) {
+		if (funcid == AL_EXT_NCACHE_HIADDR_SET) {
+			return dr1v90_set_ncache_hiaddr(regs->a0, regs->a1,
+							regs, out_value, out_trap);
 		}
 	}
 	return SBI_ENOTSUPP;
