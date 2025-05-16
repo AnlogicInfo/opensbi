@@ -12,7 +12,7 @@ AL_BOARD_DIR := $(shell rm -f $(platform_src_dir)/board;ln -s boards/$(AL_BOARD)
 endif
 
 # Compiler flags
-platform-genflags-y = -I$(platform_src_dir)/board
+platform-genflags-y = -I$(platform_src_dir)/board -I$(platform_src_dir)
 platform-cppflags-y =
 platform-cflags-y =
 platform-asflags-y =

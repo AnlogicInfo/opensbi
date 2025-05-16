@@ -24,6 +24,7 @@
 
 #include <board_cfg.h>
 #include "hardware.h"
+#include "../rel_ver.h"
 
 /* clang-format off */
 
@@ -164,6 +165,7 @@ static int dr1v90_final_init(bool cold_boot)
 	sbi_printf("mdcfg_info                : 0x%lx\r\n", csr_read(0xfc1));
 	sbi_printf("mcfg_info                 : 0x%lx\r\n", csr_read(0xfc2));
 	sbi_printf("misa                      : 0x%lx\r\n", csr_read(0x301));
+	sbi_printf("SBIRel                    : %s\r\n", ANLOGIC_REL_VER);
 
 	return 0;
 }
